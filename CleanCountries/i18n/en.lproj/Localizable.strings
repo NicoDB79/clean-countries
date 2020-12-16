@@ -1,0 +1,16 @@
+/* 
+  Localizable.strings
+  CleanCountries
+
+  Created by Nicola De Bei on 12/12/2020.
+  
+*/
+"country_list_title" = "List of countries";
+"country_list_error_title" = "Attention";
+"country_list_error_message" = "An error occured trying to obtain list of countries";
+"country_list_search_message" = "Search countries...";
+"country_detail_code_2l_text" = "2 characters code:";
+"country_detail_code_3l_text" = "3 characters code:";
+"country_note_label_text" = "Add a note";
+"add_note_title" = "Add a note";
+"text_view_done" = "Done";
