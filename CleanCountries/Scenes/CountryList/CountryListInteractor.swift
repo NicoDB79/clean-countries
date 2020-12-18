@@ -53,12 +53,15 @@ extension CountryListInteractor: CountryListBusinessLogic {
     // MARK: - Download countries from API
     func fetchOnlineCountries() {
         countriesOnlineWorker?.fetch { [weak self] in
+            guard let countries = $0.value, $0.isSuccess else {
+                self?.presenter.presentFetchedCountries(error: $0.error ?? .unknownReason(nil))
+                return
+            }
+            
             // once downloaded, insert/update countries into database and then present them
-            if let countries = $0.value {
-                if let storedCountries = self?.countriesOfflineWorker?.updateCountries(countries).value {
-                    DispatchQueue.main.async {
-                        self?.presentCountries(result: .success(storedCountries))
-                    }
+            if let storedCountries = self?.countriesOfflineWorker?.updateCountries(countries).value {
+                DispatchQueue.main.async {
+                    self?.presentCountries(result: .success(storedCountries))
                 }
             }
         }
