@@ -2,27 +2,29 @@
 //  CountryListInteractor.swift
 //  CleanCountries
 //
-//  Created by Nicola De Bei on 12/12/2020.
+//  Created by Nicola De Bei on 18/01/2021.
+//  
 //
+
 import Foundation
 
 class CountryListInteractor {
-    private let presenter: CountryListPresentable
+
+    // MARK: Properties
+    var presenter: CountryListPresenterProtocol?
     private let countriesOnlineWorker: CountriesWorker?
     private let countriesOfflineWorker: CountriesWorker?
     private var networkMonitor = Reach()
     
     var countries: [Country]?
     
-    init(presenter: CountryListPresentable) {
-        self.presenter = presenter
+    init() {
         self.countriesOnlineWorker = CountriesWorker(store: CountriesStoreAPI())
         self.countriesOfflineWorker = CountriesWorker(store: CountriesStoreDatabase())
     }
 }
 
-extension CountryListInteractor: CountryListBusinessLogic {
-    
+extension CountryListInteractor: CountryListInteractorProtocol {
     // MARK: - Fetch countries from db
     func fetchDatabaseCountries(completion: (() -> ())?) {
         DispatchQueue.global().async { [weak self] in
@@ -30,7 +32,7 @@ extension CountryListInteractor: CountryListBusinessLogic {
                 guard let value = $0.value, $0.isSuccess else {
                     let error = $0.error ?? .unknownReason(nil)
                     DispatchQueue.main.async {
-                        self?.presenter.presentSearchedCountries(error: error)
+                        self?.presenter?.presentSearchedCountries(error: error)
                         completion?()
                     }
                     return
@@ -41,7 +43,7 @@ extension CountryListInteractor: CountryListBusinessLogic {
                 self?.countries = sortedCountries
                 
                 DispatchQueue.main.async {
-                    self?.presenter.presentSearchedCountries(
+                    self?.presenter?.presentSearchedCountries(
                         for: CountryListModels.Response(countries: sortedCountries)
                     )
                     completion?()
@@ -54,7 +56,7 @@ extension CountryListInteractor: CountryListBusinessLogic {
     func fetchOnlineCountries() {
         countriesOnlineWorker?.fetch { [weak self] in
             guard let countries = $0.value, $0.isSuccess else {
-                self?.presenter.presentFetchedCountries(error: $0.error ?? .unknownReason(nil))
+                self?.presenter?.presentFetchedCountries(error: $0.error ?? .unknownReason(nil))
                 return
             }
             
@@ -69,7 +71,7 @@ extension CountryListInteractor: CountryListBusinessLogic {
     
     private func presentCountries(result: Result<[Country], DataError>) {
         guard let value = result.value, result.isSuccess else {
-            presenter.presentFetchedCountries(error: result.error ?? .unknownReason(nil))
+            presenter?.presentFetchedCountries(error: result.error ?? .unknownReason(nil))
             return
         }
         
@@ -78,7 +80,7 @@ extension CountryListInteractor: CountryListBusinessLogic {
         self.countries = sortedCountries
         
         // present countries
-        presenter.presentFetchedCountries(
+        presenter?.presentFetchedCountries(
             for: CountryListModels.Response(countries: sortedCountries)
         )
     }
@@ -89,13 +91,13 @@ extension CountryListInteractor: CountryListBusinessLogic {
         
         countriesOfflineWorker?.search(with: workerRequest) { [weak self] in
             guard let value = $0.value, $0.isSuccess else {
-                self?.presenter.presentSearchedCountries(error: $0.error ?? .unknownReason(nil))
+                self?.presenter?.presentSearchedCountries(error: $0.error ?? .unknownReason(nil))
                 return
             }
             
             self?.countries = value
             
-            self?.presenter.presentSearchedCountries(
+            self?.presenter?.presentSearchedCountries(
                 for: CountryListModels.Response(countries: value)
             )
         }

@@ -10,8 +10,4 @@ enum AppModels {
         let title: String
         let message: String?
     }
-    
-    struct ProgressHUD {
-        let message: String?
-    }
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -16,19 +16,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_full" translatesAutoresizingMaskIntoConstraints="NO" id="mNx-zL-hfo">
-                                <rect key="frame" x="87" y="389" width="240" height="128"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Clean Countries" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z9h-D0-QOy">
+                                <rect key="frame" x="137" y="441" width="140" height="24"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="128" id="D9Y-dl-Q0B"/>
-                                    <constraint firstAttribute="width" constant="240" id="VXP-65-AL2"/>
+                                    <constraint firstAttribute="height" constant="24" id="OHb-yo-45t"/>
+                                    <constraint firstAttribute="width" constant="140" id="Vhx-mN-LIL"/>
                                 </constraints>
-                            </imageView>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="mNx-zL-hfo" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="FLt-ta-Eux"/>
-                            <constraint firstItem="mNx-zL-hfo" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="ndk-BL-HJO"/>
+                            <constraint firstItem="z9h-D0-QOy" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="022-rs-APd"/>
+                            <constraint firstItem="z9h-D0-QOy" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="Ifc-BC-4Mw"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -38,7 +41,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="logo_full" width="368" height="100"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

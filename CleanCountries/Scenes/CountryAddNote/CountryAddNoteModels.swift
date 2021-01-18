@@ -1,5 +1,5 @@
 //
-//  AddNoteModels.swift
+//  CountryAddNoteModels.swift
 //  CleanCountries
 //
 //  Created by Nicola De Bei on 13/12/2020.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum AddNoteModels {
+enum CountryAddNoteModels {
     
     struct FetchRequest {
         let country: Country

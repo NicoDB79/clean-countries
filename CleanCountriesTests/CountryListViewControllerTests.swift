@@ -28,9 +28,7 @@ class CountryListViewControllerTests: XCTestCase {
     // MARK: - Test setup
     
     func setupCountryListViewController() {
-        let bundle = Bundle.main
-        let storyboard = UIStoryboard(name: "CountryList", bundle: bundle)
-        sut = storyboard.instantiateViewController(withIdentifier: "countryList") as? CountryListViewController
+        sut = CountryListViewController.instantiate(storyboardName: "CountryList")
     }
     
     func loadView() {
@@ -38,7 +36,7 @@ class CountryListViewControllerTests: XCTestCase {
         RunLoop.current.run(until: Date())
     }
     
-    class CountryListBusinessLogicSpy: CountryListBusinessLogic {
+    class CountryListBusinessLogicSpy: CountryListInteractorProtocol {
         var countries: [Country]?
         
         // MARK: Method call expectations

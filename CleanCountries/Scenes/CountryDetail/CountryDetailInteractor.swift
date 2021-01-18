@@ -2,22 +2,21 @@
 //  CountryDetailInteractor.swift
 //  CleanCountries
 //
-//  Created by Nicola De Bei on 13/12/2020.
+//  Created by Nicola De Bei on 18/01/2021.
+//  
 //
 
 import Foundation
 
 class CountryDetailInteractor {
-    private let presenter: CountryDetailPresentable
+
+    // MARK: Properties
+    var presenter: CountryDetailPresenterProtocol?
     private let countriesWorker = CountriesWorker(store: CountriesStoreDatabase())
-    
-    init(presenter: CountryDetailPresentable) {
-        self.presenter = presenter
-    }
 }
 
-extension CountryDetailInteractor: CountryDetailBusinessLogic {
+extension CountryDetailInteractor: CountryDetailInteractorProtocol {
     func fetchCountry(for request: CountryDetailModels.FetchRequest) {
-        self.presenter.presentFetchedCountry(for: CountryDetailModels.Response(country: request.country))
+        self.presenter?.presentFetchedCountry(for: CountryDetailModels.Response(country: request.country))
     }
 }

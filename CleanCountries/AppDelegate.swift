@@ -7,7 +7,6 @@
 
 import UIKit
 import RealmSwift
-import SVProgressHUD
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,16 +14,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
-        // Showing launchscreen for 3 seconds
-        Thread.sleep(forTimeInterval: 3.0)
-        
         if #available(iOS 13.0, *) {
             window = UIWindow(frame: UIScreen.main.bounds)
         }
-        
-        setDefaultRealm()
-        configureLoggers()
         return true
     }
 
@@ -41,8 +33,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
+}
 
-    private func setDefaultRealm() {
+// MARK: UIApplication extension
+extension UIApplication {
+    
+    func setDefaultRealm() {
         var config = Realm.Configuration()
         
         // Use the default directory, but replace the filename with the app name
@@ -59,15 +55,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
      * Yu can plant any logger you want.
      * For example you can provide the implementation of other loggers as CocoaLumberjack or Crashlytics.
     */
-    private func configureLoggers(level: AppLogLevel = .v) {
+    func configureLoggers(level: AppLogLevel = .v) {
+        AppLog.plant(tree: DefaultLogger(level))
         //AppLog.plant(tree: CocoaLumberjackLogger(level))
         //AppLog.plant(tree: CrashlyticsLogger(level))
     }
     
-}
-
-// MARK: UIApplication extension
-extension UIApplication {
     class func topViewController(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
         if let navigationController = controller as? UINavigationController {
             return topViewController(controller: navigationController.visibleViewController)

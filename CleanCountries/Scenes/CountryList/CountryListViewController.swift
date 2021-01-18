@@ -2,14 +2,15 @@
 //  CountryListViewController.swift
 //  CleanCountries
 //
-//  Created by Nicola De Bei on 12/12/2020.
+//  Created by Nicola De Bei on 18/01/2021.
+//  
 //
 
 import UIKit
 import SVProgressHUD
 import Combine
 
-class CountryListViewController: UIViewController {
+class CountryListViewController: UIViewController, Storyboarded {
     
     // MARK: - Controls
     
@@ -56,15 +57,9 @@ class CountryListViewController: UIViewController {
     var cancellables: [AnyCancellable] = []
     var countryUpdateCancellable: AnyCancellable?
     
-    // MARK: - VIP variables
-    
-    lazy var interactor: CountryListBusinessLogic = CountryListInteractor(
-        presenter: CountryListPresenter(viewController: self)
-    )
-    
-    private lazy var router: CountryListRoutable = CountryListRouter(
-        viewController: self
-    )
+    // MARK: - Properties
+    var interactor: CountryListInteractorProtocol?
+    var router: CountryListRouterProtocol?
     
     // MARK: - View models
     
@@ -128,22 +123,22 @@ private extension CountryListViewController {
     
     func fetchData() {
         SVProgressHUD.show()
-        interactor.fetchDatabaseCountries { [weak self] in
-            self?.interactor.fetchOnlineCountries()
+        interactor?.fetchDatabaseCountries { [weak self] in
+            self?.interactor?.fetchOnlineCountries()
         }
     }
     
     func fetchOfflineData() {
-        interactor.fetchDatabaseCountries(completion: nil)
+        interactor?.fetchDatabaseCountries(completion: nil)
     }
     
     func fetchOnlineData() {
         searchController.isActive = false
-        self.interactor.fetchOnlineCountries()
+        self.interactor?.fetchOnlineCountries()
     }
     
     func searchData(for text: String) {
-        interactor.searchCountries(with: CountryListModels.SearchRequest(text: text))
+        interactor?.searchCountries(with: CountryListModels.SearchRequest(text: text))
     }
     
     func loadList() {
@@ -156,9 +151,7 @@ private extension CountryListViewController {
     }
 }
 
-// MARK: - VIP cycle
-
-extension CountryListViewController: CountryListDisplayable {
+extension CountryListViewController: CountryListViewProtocol{
     func displayFetchedCountries(with viewModel: CountryListModels.ListViewModel) {
         listViewModel = viewModel
         DispatchQueue.main.async {
@@ -175,19 +168,12 @@ extension CountryListViewController: CountryListDisplayable {
     }
 }
 
-// MARK: - Taps
-
-extension CountryListViewController {
-    
-}
-
 // MARK: - Delegates
-
 extension CountryListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let country = interactor.countries?[indexPath.row] else { return }
-        router.showCountry(for: country)
+        guard let country = interactor?.countries?[indexPath.row] else { return }
+        router?.showCountry(for: country)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

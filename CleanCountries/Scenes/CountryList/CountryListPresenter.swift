@@ -2,21 +2,19 @@
 //  CountryListPresenter.swift
 //  CleanCountries
 //
-//  Created by Nicola De Bei on 12/12/2020.
+//  Created by Nicola De Bei on 18/01/2021.
+//  
 //
 
-import UIKit
+import Foundation
 
-struct CountryListPresenter: CountryListPresentable {
-    
-    private weak var viewController: CountryListDisplayable?
-    
-    init(viewController: CountryListDisplayable?) {
-        self.viewController = viewController
-    }
+class CountryListPresenter {
+
+    // MARK: Properties
+    weak var viewController: CountryListViewProtocol?
 }
 
-extension CountryListPresenter {
+extension CountryListPresenter: CountryListPresenterProtocol {
     func presentFetchedCountries(for response: CountryListModels.Response) {
         let viewModel = CountryListModels.ListViewModel(
             displayedCountries: response.countries.map { make(country: $0) }

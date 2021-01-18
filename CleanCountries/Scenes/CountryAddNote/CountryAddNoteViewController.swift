@@ -1,15 +1,17 @@
 //
-//  AddNoteViewController.swift
+//  CountryAddNoteViewController.swift
 //  CleanCountries
 //
-//  Created by Nicola De Bei on 13/12/2020.
+//  Created by Nicola De Bei on 18/01/2021.
+//  
 //
 
 import Foundation
 import UIKit
 import Combine
 
-class AddNoteViewController: UIViewController {
+class CountryAddNoteViewController: UIViewController, Storyboarded {
+    
     // MARK: - Controls
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var textView: UITextView!
@@ -18,19 +20,13 @@ class AddNoteViewController: UIViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var roundedView: RoundedCornerView!
     
-    // MARK: - VIP variables
-    
-    lazy var interactor: AddNoteBusinessLogic = AddNoteInteractor(
-        presenter: AddNotePresenter(viewController: self)
-    )
-    
-    private lazy var router: AddNoteRoutable = AddNoteRouter(
-        viewController: self
-    )
+    // MARK: - Properties
+    var interactor: CountryAddNoteInteractorProtocol?
+    var router: CountryAddNoteRouterProtocol?
     
     // MARK: - View models
     
-    private var noteViewModel: AddNoteModels.NoteViewModel?
+    private var noteViewModel: CountryAddNoteModels.NoteViewModel?
     
     // MARK: - Internal variables
     
@@ -104,38 +100,40 @@ class AddNoteViewController: UIViewController {
                                target: self,
                                selector: #selector(tapDone(sender:)))
         
-        textView.becomeFirstResponder()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.textView.becomeFirstResponder()
+        }
     }
     
     func fetchNote() {
         if let countryToFetch = country {
-            self.interactor.fetchNote(for: AddNoteModels.FetchRequest(country: countryToFetch))
+            self.interactor?.fetchNote(for: CountryAddNoteModels.FetchRequest(country: countryToFetch))
         }
     }
 }
 
 // MARK: - Events
 
-extension AddNoteViewController: AddNoteDisplayable {
-    func displayNote(with viewModel: AddNoteModels.NoteViewModel) {
+extension CountryAddNoteViewController: CountryAddNoteViewProtocol {
+    func displayNote(with viewModel: CountryAddNoteModels.NoteViewModel) {
         textView.text = viewModel.displayedNote.note
     }
 }
 
 // MARK: - Taps
 
-extension AddNoteViewController {
+extension CountryAddNoteViewController {
     @IBAction func saveTapped(_ sender: Any) {
         if let countryID = country?.id {
-            if let savedCountry = interactor.saveNote(textView.text, for: countryID) {
+            if let savedCountry = interactor?.saveNote(textView.text, for: countryID) {
                 onSave?(savedCountry)
             }
-            router.close()
+            router?.close()
         }
     }
     
     @IBAction func cancelTapped(_ sender: Any) {
-        router.close()
+        router?.close()
     }
     
     @objc func dismissKeyboard() {

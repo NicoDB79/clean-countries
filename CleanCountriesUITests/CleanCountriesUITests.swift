@@ -66,6 +66,6 @@ class CleanCountriesUITests: XCTestCase {
 
 extension XCUIApplication {
     var isDisplayingDetail: Bool {
-        return otherElements["countryDetail"].exists
+        return otherElements["CountryDetailViewController"].exists
     }
 }

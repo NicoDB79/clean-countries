@@ -2,13 +2,16 @@
 //  CountryDetailViewController.swift
 //  CleanCountries
 //
-//  Created by Nicola De Bei on 13/12/2020.
+//  Created by Nicola De Bei on 18/01/2021.
+//  
 //
+
+import UIKit
 
 import UIKit
 import MapKit
 
-class CountryDetailViewController: UIViewController {
+class CountryDetailViewController: UIViewController, Storyboarded {
     
     // MARK: - Controls
     @IBOutlet weak var flagImageView: UIImageView!
@@ -22,15 +25,9 @@ class CountryDetailViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     
     
-    // MARK: - VIP variables
-    
-    lazy var interactor: CountryDetailBusinessLogic = CountryDetailInteractor(
-        presenter: CountryDetailPresenter(viewController: self)
-    )
-    
-    private lazy var router: CountryDetailRoutable = CountryDetailRouter(
-        viewController: self
-    )
+    // MARK: - Properties
+    var interactor: CountryDetailInteractorProtocol?
+    var router: CountryDetailRouterProtocol?
     
     // MARK: - Internal variables
     
@@ -43,7 +40,7 @@ class CountryDetailViewController: UIViewController {
     // MARK: - Controller cycle
     
     override func viewDidLoad() {
-        view.accessibilityIdentifier = "countryDetail"
+        view.accessibilityIdentifier = "CountryDetailViewController"
         super.viewDidLoad()
         configure()
         fetchData()
@@ -70,7 +67,7 @@ extension CountryDetailViewController {
     
     func fetchData() {
         if let c = country {
-            self.interactor.fetchCountry(for: CountryDetailModels.FetchRequest(country: c))
+            self.interactor?.fetchCountry(for: CountryDetailModels.FetchRequest(country: c))
         }
     }
     
@@ -113,7 +110,7 @@ extension CountryDetailViewController {
     
     @objc func showNote() {
         if let c = country {
-            router.showNote(for: c)
+            router?.showNote(for: c)
         }
     }
     
@@ -121,7 +118,7 @@ extension CountryDetailViewController {
 
 // MARK: - VIP cycle
 
-extension CountryDetailViewController: CountryDetailDisplayable {
+extension CountryDetailViewController: CountryDetailViewProtocol {
     func displayCountry(with viewModel: CountryDetailModels.CountryViewModel) {
         countryViewModel = viewModel
         loadInfo()

@@ -2,21 +2,19 @@
 //  CountryDetailPresenter.swift
 //  CleanCountries
 //
-//  Created by Nicola De Bei on 13/12/2020.
+//  Created by Nicola De Bei on 18/01/2021.
+//  
 //
 
 import UIKit
 
-struct CountryDetailPresenter: CountryDetailPresentable {
-
-    private weak var viewController: CountryDetailDisplayable?
+class CountryDetailPresenter {
     
-    init(viewController: CountryDetailDisplayable?) {
-        self.viewController = viewController
-    }
+    // MARK: Properties
+    weak var viewController: CountryDetailViewProtocol?
 }
 
-extension CountryDetailPresenter {
+extension CountryDetailPresenter: CountryDetailPresenterProtocol {
     func presentFetchedCountry(for response: CountryDetailModels.Response) {
         let viewModel = CountryDetailModels.CountryViewModel(
             displayedCountry: make(country: response.country)
@@ -53,3 +51,4 @@ private extension CountryDetailPresenter {
                                                     noteButtonImage: noteButtonImage)
     }
 }
+

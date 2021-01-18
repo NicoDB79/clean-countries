@@ -2,33 +2,46 @@
 //  CountryDetailRouter.swift
 //  CleanCountries
 //
-//  Created by Nicola De Bei on 13/12/2020.
+//  Created by Nicola De Bei on 18/01/2021.
+//  
 //
 
+import Foundation
 import UIKit
 
-struct CountryDetailRouter {
-    weak var viewController: UIViewController?
+class CountryDetailRouter {
     
-    init(viewController: UIViewController?) {
-        self.viewController = viewController
+    // MARK: Properties
+    weak var view: UIViewController?
+    
+    // MARK: Static methods
+    static func createModule() -> CountryDetailViewController {
+        
+        //MARK: Initialise components.
+        let viewController = CountryDetailViewController.instantiate(storyboardName: "CountryList")
+        let presenter = CountryDetailPresenter()
+        let interactor = CountryDetailInteractor()
+        let router = CountryDetailRouter()
+        
+        //MARK: link VIP components.
+        viewController.interactor = interactor
+        viewController.router = router
+        presenter.viewController = viewController
+        interactor.presenter = presenter
+        router.view = viewController
+        
+        return viewController
     }
 }
 
-extension CountryDetailRouter: CountryDetailRoutable {
+extension CountryDetailRouter: CountryDetailRouterProtocol {
     func showNote(for country: Country) {
-        present(storyboard: .countryList,
-                identifier: "addNote",
-                animated: true,
-                modalPresentationStyle: .automatic,
-                modalTransitionStyle: .coverVertical,
-                configure: { (controller: AddNoteViewController) in
-                    controller.country = country
-                    controller.onSave = { country in
-                        (self.viewController as! CountryDetailViewController).country = country
-                        (self.viewController as! CountryDetailViewController).fetchData()
-                    }
-                },
-                completion: nil)
+        let countryAddNoteVC = CountryAddNoteRouter.createModule()
+        countryAddNoteVC.country = country
+        countryAddNoteVC.onSave = { country in
+            (self.view as! CountryDetailViewController).country = country
+            (self.view as! CountryDetailViewController).fetchData()
+        }
+        view?.present(countryAddNoteVC, animated: true, completion: nil)
     }
 }

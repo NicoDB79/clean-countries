@@ -6,11 +6,9 @@
 //
 
 import UIKit
-import SVProgressHUD
 
 protocol AppDisplayable {
     func display(error: AppModels.Error, completion: (() -> ())?)
-    func displayProgressHUD(model: AppModels.ProgressHUD)
 }
 
 extension AppDisplayable where Self: UIViewController {
@@ -32,9 +30,5 @@ extension AppDisplayable where Self: UIViewController {
             guard let topController = UIApplication.topViewController() else { return }
             topController.present(alertController, animated: true, completion: nil)
         }
-    }
-    
-    func displayProgressHUD(model: AppModels.ProgressHUD) {
-        SVProgressHUD.show(withStatus: model.message)
     }
 }

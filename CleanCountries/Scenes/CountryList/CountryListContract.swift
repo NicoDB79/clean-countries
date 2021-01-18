@@ -1,23 +1,29 @@
 //
-//  CountryListInterfaces.swift
+//  CountryListContract.swift
 //  CleanCountries
 //
-//  Created by Nicola De Bei on 12/12/2020.
+//  Created by Nicola De Bei on 18/01/2021.
+//  
 //
 
-protocol CountryListDisplayable: class, AppDisplayable { // View Controller
+import Foundation
+
+// MARK: View Protocol
+protocol CountryListViewProtocol: class, AppDisplayable {
     func displayFetchedCountries(with viewModel: CountryListModels.ListViewModel)
     func displaySearchedCountries(with viewModel: CountryListModels.ListViewModel)
 }
 
-protocol CountryListBusinessLogic { // Interactor
+// MARK: Interactor Protocol
+protocol CountryListInteractorProtocol {
     var countries: [Country]? { get set }
     func fetchDatabaseCountries(completion: (() -> ())?)
     func fetchOnlineCountries()
     func searchCountries(with request: CountryListModels.SearchRequest)
 }
 
-protocol CountryListPresentable { // Presenter
+// MARK: Presenter Protocol
+protocol CountryListPresenterProtocol {
     func presentFetchedCountries(for response: CountryListModels.Response)
     func presentFetchedCountries(error: DataError)
     
@@ -25,6 +31,7 @@ protocol CountryListPresentable { // Presenter
     func presentSearchedCountries(error: DataError)
 }
 
-protocol CountryListRoutable: AppRoutable { // Router
+// MARK: Router Protocol
+protocol CountryListRouterProtocol {
     func showCountry(for country: Country)
 }
